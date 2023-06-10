@@ -1,12 +1,12 @@
-import { Base64encoder } from "./base64encoder";
+import { UrlEncoder } from "./urlencoder";
 
-const createEncoder = () => {
-  return new Base64encoder();
-};
+function createUrlEncoder() {
+  return new UrlEncoder();
+}
 
-describe("Base64encode", () => {
+describe("UrlEncoder", () => {
   test("defined and works with empty string", () => {
-    const sut = createEncoder();
+    const sut = createUrlEncoder();
 
     expect(sut).toBeDefined();
     expect(sut.encode("")).toBe("");
@@ -15,19 +15,19 @@ describe("Base64encode", () => {
   describe("encode", () => {
     test.each([
       {
-        input: "hat",
-        expected: "aGF0",
+        input: "foo bar baz",
+        expected: "foo%20bar%20baz",
       },
       {
-        input: "Hello World",
-        expected: "SGVsbG8gV29ybGQ=",
+        input: "babaganush",
+        expected: "babaganush",
       },
       {
         input: "Hello World 🐸",
-        expected: "SGVsbG8gV29ybGQg8J+QuA==",
+        expected: "Hello%20World%20%F0%9F%90%B8",
       },
     ])("$input transformed into $expected", ({ input, expected }) => {
-      const sut = createEncoder();
+      const sut = createUrlEncoder();
       const result = sut.encode(input);
 
       expect(result).toBe(expected);
@@ -37,19 +37,19 @@ describe("Base64encode", () => {
   describe("decode", () => {
     test.each([
       {
-        expected: "hat",
-        input: "aGF0",
+        input: "foo%20bar%20baz",
+        expected: "foo bar baz",
       },
       {
-        expected: "Hello World",
-        input: "SGVsbG8gV29ybGQ=",
+        input: "babaganush",
+        expected: "babaganush",
       },
       {
+        input: "Hello%20World%20%F0%9F%90%B8",
         expected: "Hello World 🐸",
-        input: "SGVsbG8gV29ybGQg8J+QuA==",
       },
     ])("$input transformed into $expected", ({ input, expected }) => {
-      const sut = createEncoder();
+      const sut = createUrlEncoder();
       const result = sut.decode(input);
 
       expect(result).toBe(expected);

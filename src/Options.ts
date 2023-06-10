@@ -17,7 +17,7 @@ function exitIfUndefined(value: any, message: string) {
 
 const encodingChoices = Object.keys(encoders).join(", ");
 
-type EncodersType = keyof typeof encoders;
+export type EncodersType = keyof typeof encoders;
 
 export interface ProcessArgs {
   readonly encoding: string;
@@ -29,20 +29,21 @@ export class Options implements ProcessArgs {
   readonly encoding: string;
   readonly decode: boolean;
 
-  constructor(public readonly input: string, args: ProcessArgs) {
+  constructor(public readonly input?: string, args?: ProcessArgs) {
     exitIfUndefined(input, "Please pass an input string to encode");
+    exitIfUndefined(args, "Please pass args");
     exitIfUndefined(
-      args.encoding,
+      args!.encoding,
       `Please pass a valid encoder option: ${encodingChoices}`
     );
     exitIfUndefined(
-      args.decode,
+      args!.decode,
       "Please pass a valid decode option: true or false."
     );
-    exitIfNotIn(Object.keys(encoders), args.encoding);
+    exitIfNotIn(Object.keys(encoders), args!.encoding);
 
-    this.decode = args.decode;
-    this.encoding = args.encoding;
+    this.decode = args!.decode;
+    this.encoding = args!.encoding;
     this.encoder = encoders[this.encoding as EncodersType];
   }
 }

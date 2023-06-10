@@ -1,8 +1,14 @@
 import { IEncoder } from "./IEncoder";
 
-const KEY_STRING =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-const EQUALS = 64; // equals sign
+export class Base64encoder implements IEncoder {
+  encode = (input: string): string =>
+    Buffer.from(input, "utf-8").toString("base64");
+
+  decode = (input: string): string =>
+    Buffer.from(input, "base64").toString("utf-8");
+}
+
+// Unrelated
 
 /*
 3 = 011
@@ -23,15 +29,11 @@ const EQUALS = 64; // equals sign
 
 */
 
-export class Base64encoder implements IEncoder {
-  encode = (input: string): string =>
-    Buffer.from(input, "utf-8").toString("base64");
-
-  decode = (input: string): string =>
-    Buffer.from(input, "base64").toString("utf-8");
-}
-
 /*
+const KEY_STRING =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const EQUALS = 64; // equals sign
+
 const myOwnBase64encode = function (input: string): string {
   let output = "";
   let i = 0;
